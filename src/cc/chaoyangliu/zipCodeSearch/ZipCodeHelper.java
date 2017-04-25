@@ -31,6 +31,8 @@ import org.w3c.dom.*;
 import cn.com.WebXml.*;
 
 import javax.swing.JScrollPane;
+import java.awt.Label;
+import java.awt.Color;
 public class ZipCodeHelper extends JFrame {
 
 	/**
@@ -61,6 +63,12 @@ public class ZipCodeHelper extends JFrame {
 	private JScrollPane resultScrollPane;
 	private JTable resultTable;
 	private DefaultTableModel resultTableModel;
+	private JTextField phoneNumTextField;
+	private JSeparator PhoneNumSeparator;
+	private JButton phoneNumInfoSearchButton;
+	private Label showPhoneNumInfoLabel;
+	private MobileCodeWSSoapProxy mobileCodeProxy;
+	private JLabel pNumResultLabel;
 	/**
 	 * Launch the application.
 	 */
@@ -82,6 +90,7 @@ public class ZipCodeHelper extends JFrame {
 	 */
 	public ZipCodeHelper() {
 		zipSearchProxy = new ChinaZipSearchWebServiceSoapProxy();
+		mobileCodeProxy = new MobileCodeWSSoapProxy();
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\temp_workspace\\WebServiceTools\\images\\mail_post_to.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -293,6 +302,57 @@ public class ZipCodeHelper extends JFrame {
 		resultTable.setFillsViewportHeight(true);
 		phoneNum = new JPanel();
 		tabbedPane.addTab("手机归属地查询", null, phoneNum, null);
+		phoneNum.setLayout(null);
+		
+		JLabel phonNumlabel = new JLabel("\u624B\u673A\u53F7\uFF1A");
+		phonNumlabel.setBounds(109, 44, 54, 15);
+		phoneNum.add(phonNumlabel);
+		
+		phoneNumTextField = new JTextField();
+		phonNumlabel.setLabelFor(phoneNumTextField);
+		phoneNumTextField.setBounds(161, 41, 125, 21);
+		phoneNum.add(phoneNumTextField);
+		phoneNumTextField.setColumns(10);
+		
+		PhoneNumSeparator = new JSeparator();
+		PhoneNumSeparator.setBounds(0, 0, 544, 102);
+		phoneNum.add(PhoneNumSeparator);
+		
+		phoneNumInfoSearchButton = new JButton("\u67E5\u8BE2");
+		phoneNumInfoSearchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String pNum = phoneNumTextField.getText();
+				String infoResult = new String();
+				if(pNum.equals("")) {
+					JOptionPane.showMessageDialog(null, "手机号不能为空！", "错误", JOptionPane.ERROR_MESSAGE);
+				} else {
+					try {
+						infoResult = mobileCodeProxy.getMobileCodeInfo(pNum, "");
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					if (infoResult.equals("手机号码错误 http://www.webxml.com.cn")) {
+						JOptionPane.showMessageDialog(null, "不存在该手机号，请核对后再进行查询！", "提示", JOptionPane.INFORMATION_MESSAGE);
+						showPhoneNumInfoLabel.setText("手机号不存在！");
+					} else {
+						showPhoneNumInfoLabel.setText(infoResult.replaceAll("^(\\d)*：", ""));
+					}			
+				}
+			}
+		});
+		phoneNumInfoSearchButton.setBounds(328, 40, 93, 23);
+		phoneNum.add(phoneNumInfoSearchButton);
+		
+		showPhoneNumInfoLabel = new Label("");
+		showPhoneNumInfoLabel.setAlignment(Label.CENTER);
+		showPhoneNumInfoLabel.setBackground(Color.WHITE);
+		showPhoneNumInfoLabel.setBounds(40, 129, 469, 167);
+		phoneNum.add(showPhoneNumInfoLabel);
+		
+		pNumResultLabel = new JLabel("\u67E5\u8BE2\u7ED3\u679C\uFF1A");
+		pNumResultLabel.setBounds(40, 108, 70, 15);
+		phoneNum.add(pNumResultLabel);
 		
 		ipAddress = new JPanel();
 		tabbedPane.addTab("IP地址归属地查询", null, ipAddress, null);
