@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 import java.awt.Toolkit;
 import javax.swing.JTabbedPane;
@@ -23,6 +24,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.apache.axis.message.MessageElement;
@@ -33,6 +35,7 @@ import cn.com.WebXml.*;
 import javax.swing.JScrollPane;
 import java.awt.Label;
 import java.awt.Color;
+import javax.swing.JFormattedTextField;
 public class ZipCodeHelper extends JFrame {
 
 	/**
@@ -68,7 +71,11 @@ public class ZipCodeHelper extends JFrame {
 	private JButton phoneNumInfoSearchButton;
 	private Label showPhoneNumInfoLabel;
 	private MobileCodeWSSoapProxy mobileCodeProxy;
+	private IpAddressSearchWebServiceSoapProxy ipAddInfoGetProxy;
 	private JLabel pNumResultLabel;
+	private JFormattedTextField ipAddressTextField;
+	private JLabel ipInfoResultLabel;
+	private Label showIpInfoLabel;
 	/**
 	 * Launch the application.
 	 */
@@ -91,6 +98,7 @@ public class ZipCodeHelper extends JFrame {
 	public ZipCodeHelper() {
 		zipSearchProxy = new ChinaZipSearchWebServiceSoapProxy();
 		mobileCodeProxy = new MobileCodeWSSoapProxy();
+		ipAddInfoGetProxy = new IpAddressSearchWebServiceSoapProxy();
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\temp_workspace\\WebServiceTools\\images\\mail_post_to.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -356,6 +364,53 @@ public class ZipCodeHelper extends JFrame {
 		
 		ipAddress = new JPanel();
 		tabbedPane.addTab("IP地址归属地查询", null, ipAddress, null);
+		ipAddress.setLayout(null);
+		
+		JLabel ipAddressLabel = new JLabel("IP\u5730\u5740\uFF1A");
+		ipAddressLabel.setBounds(118, 62, 67, 15);
+		ipAddress.add(ipAddressLabel);
+		MaskFormatter mf = null;
+		try {
+			mf = new MaskFormatter("###.###.###.###");
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ipAddressTextField = new JFormattedTextField(mf);
+		ipAddressLabel.setLabelFor(ipAddressTextField);
+		ipAddressTextField.setBounds(174, 59, 107, 21);
+		ipAddress.add(ipAddressTextField);
+		
+		JButton button = new JButton("\u67E5\u8BE2");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String ipAdd = ipAddressTextField.getText();
+				String ipAddInfoResult [] = null;
+				if (ipAdd.equals("")) {
+					JOptionPane.showMessageDialog(null, "IP地址不能为空！", "错误", JOptionPane.ERROR_MESSAGE);
+				} else {
+					try {
+						ipAddInfoResult = ipAddInfoGetProxy.getCountryCityByIp(ipAdd);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			}
+		});
+		button.setBounds(322, 58, 93, 23);
+		ipAddress.add(button);
+		
+		ipInfoResultLabel = new JLabel("\u67E5\u8BE2\u7ED3\u679C");
+		ipInfoResultLabel.setBounds(32, 112, 67, 15);
+		ipAddress.add(ipInfoResultLabel);
+		
+		showIpInfoLabel = new Label("");
+		showIpInfoLabel.setBackground(Color.WHITE);
+		showIpInfoLabel.setAlignment(Label.CENTER);
+		showIpInfoLabel.setBounds(37, 142, 469, 167);
+		ipAddress.add(showIpInfoLabel);
 	}
 	void ClearResultTable() {
 		while (resultTableModel.getRowCount() != 0) {
