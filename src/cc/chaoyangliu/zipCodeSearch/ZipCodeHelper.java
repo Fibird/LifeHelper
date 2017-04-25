@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 import org.apache.axis.message.MessageElement;
 import org.w3c.dom.*;
-
 import cn.com.WebXml.*;
 
 import javax.swing.JScrollPane;
@@ -342,7 +341,7 @@ public class ZipCodeHelper extends JFrame {
 					}
 					if (infoResult.equals("手机号码错误 http://www.webxml.com.cn")) {
 						JOptionPane.showMessageDialog(null, "不存在该手机号，请核对后再进行查询！", "提示", JOptionPane.INFORMATION_MESSAGE);
-						showPhoneNumInfoLabel.setText("手机号不存在！");
+						//showPhoneNumInfoLabel.setText("手机号不存在！");
 					} else {
 						showPhoneNumInfoLabel.setText(infoResult.replaceAll("^(\\d)*：", ""));
 					}			
@@ -367,7 +366,7 @@ public class ZipCodeHelper extends JFrame {
 		ipAddress.setLayout(null);
 		
 		JLabel ipAddressLabel = new JLabel("IP\u5730\u5740\uFF1A");
-		ipAddressLabel.setBounds(118, 62, 67, 15);
+		ipAddressLabel.setBounds(117, 48, 67, 15);
 		ipAddress.add(ipAddressLabel);
 		MaskFormatter mf = null;
 		try {
@@ -378,7 +377,7 @@ public class ZipCodeHelper extends JFrame {
 		}
 		ipAddressTextField = new JFormattedTextField(mf);
 		ipAddressLabel.setLabelFor(ipAddressTextField);
-		ipAddressTextField.setBounds(174, 59, 107, 21);
+		ipAddressTextField.setBounds(173, 45, 107, 21);
 		ipAddress.add(ipAddressTextField);
 		
 		JButton button = new JButton("\u67E5\u8BE2");
@@ -386,6 +385,7 @@ public class ZipCodeHelper extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String ipAdd = ipAddressTextField.getText();
 				String ipAddInfoResult [] = null;
+				
 				if (ipAdd.equals("")) {
 					JOptionPane.showMessageDialog(null, "IP地址不能为空！", "错误", JOptionPane.ERROR_MESSAGE);
 				} else {
@@ -395,21 +395,26 @@ public class ZipCodeHelper extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+					if (ipAddInfoResult[1].equals("IP地址错误（IP包含非法字符或数据不正确）！请输入标准IP格式：*.*.*.*，http://www.webxml.com.cn")) {
+						JOptionPane.showMessageDialog(null, "错误的IP地址格式，请核对后再进行查询！", "错误", JOptionPane.ERROR_MESSAGE);
+					} else {
+						showIpInfoLabel.setText(ipAddInfoResult[1]);
+					}		
 				}
 				
 			}
 		});
-		button.setBounds(322, 58, 93, 23);
+		button.setBounds(321, 44, 93, 23);
 		ipAddress.add(button);
 		
-		ipInfoResultLabel = new JLabel("\u67E5\u8BE2\u7ED3\u679C");
-		ipInfoResultLabel.setBounds(32, 112, 67, 15);
+		ipInfoResultLabel = new JLabel("\u67E5\u8BE2\u7ED3\u679C\uFF1A");
+		ipInfoResultLabel.setBounds(37, 104, 67, 15);
 		ipAddress.add(ipInfoResultLabel);
 		
 		showIpInfoLabel = new Label("");
 		showIpInfoLabel.setBackground(Color.WHITE);
 		showIpInfoLabel.setAlignment(Label.CENTER);
-		showIpInfoLabel.setBounds(37, 142, 469, 167);
+		showIpInfoLabel.setBounds(47, 125, 469, 167);
 		ipAddress.add(showIpInfoLabel);
 	}
 	void ClearResultTable() {

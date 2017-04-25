@@ -16,6 +16,7 @@ public class IpAddressInfoGet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		System.out.println(ipInfoResult.length);
 		System.out.println(ipInfoResult[1]);
 	}
