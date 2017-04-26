@@ -99,7 +99,7 @@ public class LifeHelper extends JFrame {
 		mobileCodeProxy = new MobileCodeWSSoapProxy();
 		ipAddInfoGetProxy = new IpAddressSearchWebServiceSoapProxy();
 		setResizable(false);
-		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\temp_workspace\\WebServiceTools\\images\\mail_post_to.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\temp_workspace\\WebServiceTools\\images\\find.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 565, 408);
 		
