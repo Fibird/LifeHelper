@@ -35,7 +35,7 @@ import javax.swing.JScrollPane;
 import java.awt.Label;
 import java.awt.Color;
 import javax.swing.JFormattedTextField;
-public class ZipCodeHelper extends JFrame {
+public class LifeHelper extends JFrame {
 
 	/**
 	 * 
@@ -82,7 +82,7 @@ public class ZipCodeHelper extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ZipCodeHelper frame = new ZipCodeHelper();
+					LifeHelper frame = new LifeHelper();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -94,7 +94,7 @@ public class ZipCodeHelper extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ZipCodeHelper() {
+	public LifeHelper() {
 		zipSearchProxy = new ChinaZipSearchWebServiceSoapProxy();
 		mobileCodeProxy = new MobileCodeWSSoapProxy();
 		ipAddInfoGetProxy = new IpAddressSearchWebServiceSoapProxy();
