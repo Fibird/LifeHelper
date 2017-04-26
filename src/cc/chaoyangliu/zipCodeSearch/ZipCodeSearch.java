@@ -33,7 +33,7 @@ public class ZipCodeSearch {
 			//Pattern p = Pattern.compile("£¨[^x00-xff]*£©");
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		for (String p : provinces) {
 			System.out.println(p.replaceAll("£¨[^x00-xff]*£©", ""));
